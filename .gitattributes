@@ -1,0 +1,8 @@
+*.cpp text charset=utf-8
+*.h text charset=utf-8
+*.hpp text charset=utf-8
+*.md text charset=utf-8
+*.txt text charset=utf-8
+CMakeLists.txt text charset=utf-8
+*.cmake text charset=utf-8
+* text=auto eol=crlf
