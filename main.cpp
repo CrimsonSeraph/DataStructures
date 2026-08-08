@@ -1,3 +1,5 @@
+#include "ArrayGuard.hpp"
+
 #include <iostream>
 
 int main() {
