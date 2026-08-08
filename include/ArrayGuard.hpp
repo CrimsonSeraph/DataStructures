@@ -1,3 +1,10 @@
+//  Copyright (c) 2026 CrimsonSeraph(ltyy.leoyu@gmail.com)
+//  SPDX-License-Identifier: MIT
+
+// ArrayGuard.hpp
+// 数组保护类，用于管理动态分配的数组内存，确保在对象生命周期结束时自动释放内存，防止内存泄漏。
+//! 不使用的保留模板类
+
 #pragma once
 
 #include <iostream>
