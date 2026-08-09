@@ -16,7 +16,11 @@ public:
   /// @brief 构造函数，分配指定大小的原始内存
   /// @param size 原始内存的大小
   inline explicit RawMemory(size_t size) : m_size(size) {
-    m_ptr = static_cast<T *>(::operator new(m_size * sizeof(T)));
+    if (size == 0) {
+      m_ptr = nullptr;
+    } else {
+      m_ptr = static_cast<T *>(::operator new(m_size * sizeof(T)));
+    }
   }
 
   /// @brief 析构函数，释放原始内存
