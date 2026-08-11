@@ -1,6 +1,7 @@
 //  Copyright (c) 2026 CrimsonSeraph(ltyy.leoyu@gmail.com)
 //  SPDX-License-Identifier: MIT
 
+#include "application/Polynomial.h"
 #include "container/FixedVector.hpp"
 #include "container/SinglyLinkedList.hpp"
 
@@ -58,9 +59,21 @@ void test_SinglyLinkedList() {
   std::cout << std::endl;
 }
 
+void test_Polynomial() {
+  Polynomial p;
+  p.insert_term(3, 2);
+  p.insert_term(2, 1);
+  p.insert_term(-1, 0);
+  std::cout << p.to_string() << std::endl;
+  std::cout << p.evaluate(2) << std::endl;
+}
+
 int main() {
-  test_FixVector();
-  std::cout << std::endl;
-  test_SinglyLinkedList();
+  //   test_FixVector();
+  //   std::cout << std::endl;
+  //   test_SinglyLinkedList();
+  //   std::cout << std::endl;
+  test_Polynomial();
+
   return 0;
 }

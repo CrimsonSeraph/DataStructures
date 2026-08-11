@@ -11,6 +11,7 @@
 
 template <typename T> class SinglyLinkedList {
 public:
+  /// @brief 单个节点：值 + 下一节点指针
   struct Node {
     T data;
     std::unique_ptr<Node> next;
@@ -20,50 +21,71 @@ public:
     inline explicit Node(const T &value) : data(value), next(nullptr) {}
   };
 
+  /// @brief 非常量迭代器，用于遍历链表并修改节点数据
   class Iterator {
     friend class ConstIterator;
 
   public:
     /// @brief 构造一个指向给定节点的迭代器
     /// @param ptr 指向节点的原始指针，迭代器将持有该指针
-    inline explicit Iterator(Node *ptr) : m_ptr(ptr) {};
+    inline explicit Iterator(Node *ptr) : m_ptr(ptr) {}
 
-    /// @brief 解引用迭代器，返回指向节点数据的引用
-    /// @return 指向当前节点中存储数据的引用（T&）
+    /// @brief 解引用迭代器，返回节点数据的可变引用
+    /// @return 当前节点中存储数据的引用（T&）
     inline T &operator*() const { return m_ptr->data; }
 
-    /// @brief 前置递增迭代器，使其指向链表中的下一个节点
-    /// @return 递增后的迭代器引用（指向下一个节点）
+    /// @brief 通过箭头运算符访问节点数据（可变）
+    /// @return 指向当前节点数据的指针（T*）
+    inline T *operator->() const { return &m_ptr->data; }
+
+    /// @brief 前置递增，使迭代器指向链表中的下一个节点
+    /// @return 递增后的迭代器引用（指向下一节点）
     inline Iterator &operator++() {
       m_ptr = m_ptr->next.get();
       return *this;
     }
 
-    /// @brief 比较两个迭代器是否不相等（基于底层指针）
+    /// @brief 比较两个迭代器是否不相等
     /// @param other 要比较的另一个迭代器
-    /// @return 如果两个迭代器指向不同节点则返回 true，否则 false
+    /// @return 若指向不同节点则返回 true，否则 false
     inline bool operator!=(const Iterator &other) const {
       return m_ptr != other.m_ptr;
     }
 
   private:
-    Node *m_ptr;
+    Node *m_ptr; ///< 底层原始指针
   };
 
+  /// @brief 常量迭代器，用于只读遍历链表
   class ConstIterator {
   public:
-    ConstIterator(const Iterator &it) : m_ptr(it.m_ptr) {}
+    /// @brief 从非常量迭代器构造常量迭代器（允许隐式转换）
+    /// @param it 非常量迭代器
+    inline ConstIterator(const Iterator &it) : m_ptr(it.m_ptr) {}
 
-    explicit ConstIterator(Node *ptr) : m_ptr(ptr) {}
+    /// @brief 构造一个指向给定节点的常量迭代器
+    /// @param ptr 指向节点的原始指针（常量）
+    inline explicit ConstIterator(Node *ptr) : m_ptr(ptr) {}
 
-    const T &operator*() const { return m_ptr->data; }
+    /// @brief 解引用迭代器，返回节点数据的常量引用（只读）
+    /// @return 当前节点数据的常量引用（const T&）
+    inline const T &operator*() const { return m_ptr->data; }
 
-    ConstIterator &operator++() {
+    /// @brief 通过箭头运算符访问节点数据（只读）
+    /// @return 指向当前节点数据的常量指针（const T*）
+    inline const T *operator->() const { return &m_ptr->data; }
+
+    /// @brief 前置递增，使迭代器指向链表中的下一个节点
+    /// @return 递增后的常量迭代器引用
+    inline ConstIterator &operator++() {
       m_ptr = m_ptr->next.get();
       return *this;
     }
 
-    bool operator!=(const ConstIterator &other) const {
+    /// @brief 比较两个常量迭代器是否不相等
+    /// @param other 要比较的另一个常量迭代器
+    /// @return 若指向不同节点则返回 true，否则 false
+    inline bool operator!=(const ConstIterator &other) const {
       return m_ptr != other.m_ptr;
     }
 
@@ -82,7 +104,7 @@ public:
 
   /// @brief 在链表头部添加一个新元素
   /// @param value 要添加的元素值（拷贝构造）
-  void push_front(const T &value) {
+  inline void push_front(const T &value) {
     auto ptr = std::make_unique<Node>(value);
     ptr->next = std::move(m_head);
     m_head = std::move(ptr);
@@ -90,7 +112,7 @@ public:
   }
 
   /// @brief 移除链表头部的元素（若链表非空）
-  void pop_front() {
+  inline void pop_front() {
     if (m_size == 0) {
       return;
     } else {
@@ -102,7 +124,7 @@ public:
   /// @brief 在指定索引位置之后插入一个新元素
   /// @param index 要插入位置的前一个节点索引（从0开始）
   /// @param value 要插入的元素值（拷贝构造）
-  void insert_after(size_t index, const T &value) {
+  inline void insert_after(size_t index, const T &value) {
     if (index >= m_size)
       throw std::out_of_range(
           "SinglyLinkList::insert_after: index out of range!");
@@ -119,7 +141,7 @@ public:
 
   /// @brief 删除指定索引位置之后的那个节点
   /// @param index 要删除节点的前一个节点索引（从0开始）
-  void erase_after(size_t index) {
+  inline void erase_after(size_t index) {
     if (m_size < 2 || index >= m_size - 1)
       throw std::out_of_range(
           "SinglyLinkList::erase_after: index out of range!");
@@ -134,7 +156,7 @@ public:
 
   /// @brief 获取链表中当前存储的元素个数
   /// @return 链表大小（size_t）
-  size_t size() const { return m_size; }
+  inline size_t size() const { return m_size; }
 
   /// @brief 返回指向容器第一个元素的非常量迭代器
   /// @return 指向头节点（m_head）的迭代器；若容器为空，则返回与 end()

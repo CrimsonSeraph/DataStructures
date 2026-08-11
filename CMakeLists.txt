@@ -13,6 +13,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 
 set(PROJECT_SOURCES
 	main.cpp
+	src/application/Polynomial.cpp
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
