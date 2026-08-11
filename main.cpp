@@ -1,12 +1,13 @@
 //  Copyright (c) 2026 CrimsonSeraph(ltyy.leoyu@gmail.com)
 //  SPDX-License-Identifier: MIT
 
-#include "FixedVector.hpp"
+#include "container/FixedVector.hpp"
+#include "container/SinglyLinkedList.hpp"
 
 #include <iostream>
 #include <string>
 
-int main() {
+void test_FixVector() {
   FixedVector<std::string> vec(2);
   vec.push_back("Hello");
   vec.push_back("world! ");
@@ -27,6 +28,39 @@ int main() {
     std::cout << s << " ";
   }
   std::cout << std::endl;
+}
 
+void test_SinglyLinkedList() {
+  SinglyLinkedList<int> list;
+
+  list.push_front(10);
+  list.push_front(20);
+  list.push_front(30);
+
+  std::cout << "Initial linked list: ";
+  for (const auto &val : list) {
+    std::cout << val << " ";
+  }
+  std::cout << std::endl; // 输出 30 20 10
+
+  list.insert_after(1, 99);
+  std::cout << "The linked list after insertion: ";
+  for (auto it = list.begin(); it != list.end(); ++it) {
+    std::cout << *it << " ";
+  }
+  std::cout << std::endl;
+
+  list.erase_after(2);
+  std::cout << "The list after deletion: ";
+  for (auto it = list.begin(); it != list.end(); ++it) {
+    std::cout << *it << " ";
+  }
+  std::cout << std::endl;
+}
+
+int main() {
+  test_FixVector();
+  std::cout << std::endl;
+  test_SinglyLinkedList();
   return 0;
 }
